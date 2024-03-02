@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("tasks")]
 public class AppTask {
+
   [Column("id")]
   public int Id { get; set; }
 

@@ -17,13 +17,14 @@ namespace Api
       services.AddEndpointsApiExplorer();
       services.AddSwaggerGen();
       services.AddControllers();
-      services.AddAutoMapper(typeof(Startup));
 
       services.AddTransient<IService, AppTaskService>();
       services.AddScoped<IService, AppTaskService>();
 
       services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+      services.AddAutoMapper(typeof(MappingProfile));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

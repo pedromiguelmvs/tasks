@@ -1,6 +1,5 @@
 using Api.Common.IService;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 public class AppTaskService(ApplicationDbContext context, IMapper mapper) : IService
@@ -10,26 +9,27 @@ public class AppTaskService(ApplicationDbContext context, IMapper mapper) : ISer
 
   private readonly IMapper _mapper = mapper;
 
-  public async Task<ActionResult<IEnumerable<AppTaskDto>>> GetAll() {
+  public async Task<List<AppTaskDto>> GetAll() {
     var tasks = await _context.AppTasks.ToListAsync();
-    return _mapper.Map<ActionResult<IEnumerable<AppTaskDto>>>(tasks);
+    return _mapper.Map<List<AppTaskDto>>(tasks);
   }
 
-  public async Task<ActionResult<AppTaskDto>> GetOne(int id) {
+  public async Task<AppTaskDto> GetOne(int id) {
     var task = await _context.AppTasks.FindAsync(id);
-    return _mapper.Map<ActionResult<AppTaskDto>>(task);
+    return _mapper.Map<AppTaskDto>(task);
   }
 
-  public async Task<ActionResult<AppTaskDto>> Create(AppTaskDto task) {
-    _context.AppTasks.Add(task);
+  public async Task<AppTaskDto> Create(AppTaskDto task) {
+    var created = _mapper.Map<AppTask>(task);
+    _context.AppTasks.Add(created);
     await _context.SaveChangesAsync();
-    return _mapper.Map<ActionResult<AppTaskDto>>(task);
+    return _mapper.Map<AppTaskDto>(created);
   }
 
-  public async Task<IActionResult> Update(int id, AppTaskDto task) {
+  public async Task<AppTaskDto> Update(int id, AppTaskDto task) {
     _context.Entry(task).State = EntityState.Modified;
-    await _context.SaveChangesAsync();
-    return _mapper.Map<IActionResult>(task);
+    var updated = await _context.SaveChangesAsync();
+    return _mapper.Map<AppTaskDto>(updated);
   }
   
   public async Task<bool> Delete(int id) {

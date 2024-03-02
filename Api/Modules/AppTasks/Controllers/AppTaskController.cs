@@ -31,7 +31,7 @@ public class TasksController(IService appTasksService) : ControllerBase
     public async Task<ActionResult<AppTaskDto>> Create(AppTaskDto task)
     {
         var created = await _appTasksService.Create(task);
-        return CreatedAtAction(nameof(GetOne), new { created.Value.Id }, created);
+        return CreatedAtAction(nameof(GetOne), new { created.Id }, created);
     }
 
     [HttpPut("{id}")]

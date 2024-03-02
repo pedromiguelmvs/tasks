@@ -7,5 +7,5 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<AppTaskDto> AppTasks { get; set; }
+    public DbSet<AppTask> AppTasks { get; set; }
 }
