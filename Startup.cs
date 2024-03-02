@@ -1,3 +1,4 @@
+using Api.Common.IService;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api
@@ -16,6 +17,10 @@ namespace Api
       services.AddEndpointsApiExplorer();
       services.AddSwaggerGen();
       services.AddControllers();
+      services.AddAutoMapper(typeof(Startup));
+
+      services.AddTransient<IService, AppTaskService>();
+      services.AddScoped<IService, AppTaskService>();
 
       services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -23,8 +28,6 @@ namespace Api
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      // app.UseHttpsRedirection();
-
       app.UseRouting();
 
       // app.UseAuthentication();

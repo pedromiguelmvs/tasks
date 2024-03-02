@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 
-public class Product {}
-
 public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -9,5 +7,5 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<Product> Products { get; set; }
+    public DbSet<AppTaskDto> AppTasks { get; set; }
 }

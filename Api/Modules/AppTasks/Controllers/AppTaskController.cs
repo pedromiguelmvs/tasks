@@ -1,59 +1,67 @@
+using Api.Common.IService;
+using Api.Common.NotFoundException;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("tasks")]
-public class TasksController : ControllerBase
+[Route("api/tasks")]
+public class TasksController(IService appTasksService) : ControllerBase
 {
-    private readonly List<AppTask> _products = new List<AppTask>
-    {
-        new AppTask { Id = 1, Name = "Item 1", Description = "Description item 1" },
-        new AppTask { Id = 2, Name = "Item 2", Description = "Description item 2" }
-    };
+
+    private readonly IService _appTasksService = appTasksService;
 
     [HttpGet]
-    public ActionResult<IEnumerable<AppTask>> Get()
+    public async Task<ActionResult<IEnumerable<AppTask>>> GetAll()
     {
-        return Ok(_products);
+        var tasks = await _appTasksService.GetAll();
+        return Ok(tasks);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<AppTask> GetById(int id)
+    public async Task<ActionResult<AppTaskDto>> GetOne(int id)
     {
-        var produto = _products.FirstOrDefault(p => p.Id == id);
-        if (produto == null)
+        var task = await _appTasksService.GetOne(id);
+        if (task == null)
+        {
             return NotFound();
-        return Ok(produto);
+        }
+        return Ok(task);
     }
 
     [HttpPost]
-    public ActionResult<AppTask> Post(AppTask produto)
+    public async Task<ActionResult<AppTaskDto>> Create(AppTaskDto task)
     {
-        produto.Id = _products.Count + 1;
-        _products.Add(produto);
-        return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
+        var created = await _appTasksService.Create(task);
+        return CreatedAtAction(nameof(GetOne), new { created.Value.Id }, created);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, AppTask produto)
+    public async Task<IActionResult> Put(int id, AppTaskDto task)
     {
-        var existingProduto = _products.FirstOrDefault(p => p.Id == id);
-        if (existingProduto == null)
+        if (id != task.Id)
+        {
+            return BadRequest();
+        }
+
+        if (task == null)
+        {
             return NotFound();
+        }
 
-        existingProduto.Name = produto.Name;
-        existingProduto.Description = produto.Description;
-
-        return NoContent();
+        var updated = await _appTasksService.Update(id, task);
+        return Ok(updated);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var produto = _products.FirstOrDefault(p => p.Id == id);
-        if (produto == null)
+        try
+        {
+            await _appTasksService.Delete(id);
+            return NoContent();
+        }
+        catch (NotFoundException)
+        {
             return NotFound();
-
-        _products.Remove(produto);
-        return NoContent();
+        }
     }
 }
