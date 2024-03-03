@@ -1,41 +1,50 @@
-using Api.Common.IService;
+using Api.Modules.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-public class AppTaskService(ApplicationDbContext context, IMapper mapper) : IService
+namespace Api.Modules.AppTasks
 {
+  public class AppTaskService(ApplicationDbContext context, IMapper mapper) : IAppTaskService
+  {
 
-  private readonly ApplicationDbContext _context = context;
+    private readonly ApplicationDbContext _context = context;
 
-  private readonly IMapper _mapper = mapper;
+    private readonly IMapper _mapper = mapper;
 
-  public async Task<List<AppTaskDto>> GetAll() {
-    var tasks = await _context.AppTasks.ToListAsync();
-    return _mapper.Map<List<AppTaskDto>>(tasks);
-  }
+    public async Task<List<AppTaskDto>> GetAll()
+    {
+      var tasks = await _context.AppTasks.ToListAsync();
+      return _mapper.Map<List<AppTaskDto>>(tasks);
+    }
 
-  public async Task<AppTaskDto> GetOne(int id) {
-    var task = await _context.AppTasks.FindAsync(id);
-    return _mapper.Map<AppTaskDto>(task);
-  }
+    public async Task<AppTaskDto> GetOne(int id)
+    {
+      var task = await _context.AppTasks.FindAsync(id);
+      return _mapper.Map<AppTaskDto>(task);
+    }
 
-  public async Task<AppTaskDto> Create(AppTaskDto task) {
-    var created = _mapper.Map<AppTask>(task);
-    _context.AppTasks.Add(created);
-    await _context.SaveChangesAsync();
-    return _mapper.Map<AppTaskDto>(created);
-  }
+    public async Task<AppTaskDto> Create(AppTaskDto task)
+    {
+      var created = _mapper.Map<AppTask>(task);
+      _context.AppTasks.Add(created);
+      await _context.SaveChangesAsync();
+      return _mapper.Map<AppTaskDto>(created);
+    }
 
-  public async Task<AppTaskDto> Update(int id, AppTaskDto task) {
-    _context.Entry(task).State = EntityState.Modified;
-    var updated = await _context.SaveChangesAsync();
-    return _mapper.Map<AppTaskDto>(updated);
-  }
-  
-  public async Task<bool> Delete(int id) {
-    var task = await _context.AppTasks.FindAsync(id);
-    _context.AppTasks.Remove(task);
-    await _context.SaveChangesAsync();
-    return true;
+    public async Task<AppTaskDto> Update(int id, AppTaskDto taskDto)
+    {
+      var task = await _context.AppTasks.FindAsync(id);
+      _mapper.Map(taskDto, task);
+      await _context.SaveChangesAsync();
+      return _mapper.Map<AppTaskDto>(task);
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+      var task = await _context.AppTasks.FindAsync(id);
+      _context.AppTasks.Remove(task);
+      await _context.SaveChangesAsync();
+      return true;
+    }
   }
 }

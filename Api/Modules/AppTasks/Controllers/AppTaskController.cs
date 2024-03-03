@@ -1,13 +1,13 @@
-using Api.Common.IService;
 using Api.Common.NotFoundException;
+using Api.Modules.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/tasks")]
-public class TasksController(IService appTasksService) : ControllerBase
+public class TasksController(IAppTaskService appTasksService) : ControllerBase
 {
 
-    private readonly IService _appTasksService = appTasksService;
+    private readonly IAppTaskService _appTasksService = appTasksService;
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppTask>>> GetAll()

@@ -8,4 +8,5 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<AppTask> AppTasks { get; set; }
+    public DbSet<User> Users { get; set; }
 }

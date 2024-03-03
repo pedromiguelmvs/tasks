@@ -1,19 +1,18 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("tasks")]
-public class AppTask {
+[Table("users")]
+public class User(string username, string password) {
 
   [Key]
   [Column("id")]
   public int Id { get; set; }
 
-  [Column("name")]
-  public string Name { get; set; } = "Nova tarefa";
+  [Column("username")]
+  public string Username { get; set; } = username;
 
-  [Column("description")]
-  public string Description { get; set; } = "Nova descrição";
+  [Column("password")]
+  public string Password { get; set; } = password;
 
   [Column("created_at")]
   public DateTime CreatedAt { get; set; }

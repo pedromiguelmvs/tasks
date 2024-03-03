@@ -1,4 +1,6 @@
-using Api.Common.IService;
+using Api.Modules.AppTasks;
+using Api.Modules.Interfaces;
+using Api.Modules.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api
@@ -14,12 +16,15 @@ namespace Api
 
     public void ConfigureServices(IServiceCollection services)
     {
+      // services.AddSwaggerGen();
       services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
       services.AddControllers();
 
-      services.AddTransient<IService, AppTaskService>();
-      services.AddScoped<IService, AppTaskService>();
+      services.AddTransient<IAppTaskService, AppTaskService>();
+      services.AddScoped<IAppTaskService, AppTaskService>();
+
+      services.AddTransient<IUsersService, UserService>();
+      services.AddScoped<IUsersService, UserService>();
 
       services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

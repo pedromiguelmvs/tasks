@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-
-namespace Api.Common.IService
+namespace Api.Modules.Interfaces
 {
-  public interface IService
+  public interface IAppTaskService
   {
     Task<List<AppTaskDto>> GetAll();
     Task<AppTaskDto> GetOne(int id);
