@@ -1,5 +1,5 @@
 using Api.Common.NotFoundException;
-using Api.Modules.Interfaces;
+using Api.Modules.Users;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -15,10 +15,10 @@ public class UserController(IUsersService userService) : ControllerBase
     return Ok(users);
   }
 
-  [HttpGet("{id}")]
-  public async Task<ActionResult<UserDto>> GetOne(int id)
+  [HttpGet("{username}")]
+  public async Task<ActionResult<UserDto>> GetOne(string username)
   {
-    var user = await _userService.GetOne(id);
+    var user = await _userService.GetOne(username);
     if (user == null)
     {
       return NotFound();

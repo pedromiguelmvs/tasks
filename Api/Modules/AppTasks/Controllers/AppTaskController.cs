@@ -1,7 +1,9 @@
 using Api.Common.NotFoundException;
 using Api.Modules.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
 [ApiController]
 [Route("api/tasks")]
 public class TasksController(IAppTaskService appTasksService) : ControllerBase

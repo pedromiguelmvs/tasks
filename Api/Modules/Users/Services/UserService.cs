@@ -17,10 +17,16 @@ namespace Api.Modules.Users
       return _mapper.Map<List<UserDto>>(users);
     }
 
-    public async Task<UserDto> GetOne(int id)
+    public async Task<UserDto> GetOne(string username)
     {
-      var user = await _context.Users.FindAsync(id);
+      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username);
       return _mapper.Map<UserDto>(user);
+    }
+
+    public async Task<bool> Exist(string username)
+    {
+      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username);
+      return user != null;
     }
 
     public async Task<UserDto> Create(UserDto userDto)
