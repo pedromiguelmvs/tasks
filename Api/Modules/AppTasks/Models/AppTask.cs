@@ -23,4 +23,9 @@ public class AppTask {
 
   [Column("deleted_at")]
   public DateTime? DeletedAt { get; set; }
+
+  [Column("user_id")]
+  public int UserId { get; set; }
+
+  public User User { get; set; }
 }

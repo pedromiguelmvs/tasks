@@ -19,10 +19,6 @@ public class UserController(IUsersService userService) : ControllerBase
   public async Task<ActionResult<UserDto>> GetOne(string username)
   {
     var user = await _userService.GetOne(username);
-    if (user == null)
-    {
-      return NotFound();
-    }
     return Ok(user);
   }
 

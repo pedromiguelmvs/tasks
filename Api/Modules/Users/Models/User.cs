@@ -22,4 +22,6 @@ public class User(string username, string password) {
 
   [Column("deleted_at")]
   public DateTime? DeletedAt { get; set; }
+
+  public ICollection<AppTask> AppTasks { get; set; }
 }

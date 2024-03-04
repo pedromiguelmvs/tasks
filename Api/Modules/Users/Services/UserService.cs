@@ -19,7 +19,7 @@ namespace Api.Modules.Users
 
     public async Task<UserDto> GetOne(string username)
     {
-      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username);
+      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username) ?? throw new Exception("Usuário inexistente.");
       return _mapper.Map<UserDto>(user);
     }
 

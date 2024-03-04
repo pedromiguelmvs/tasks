@@ -8,24 +8,23 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/tasks")]
 public class TasksController(IAppTaskService appTasksService) : ControllerBase
 {
-
     private readonly IAppTaskService _appTasksService = appTasksService;
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppTask>>> GetAll()
     {
-        var tasks = await _appTasksService.GetAll();
+        var userId = HttpContext.Items["Id"] as string;
+        _ = int.TryParse(userId, out int userIdAsInt);
+        var tasks = await _appTasksService.GetAll(userIdAsInt);
         return Ok(tasks);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<AppTaskDto>> GetOne(int id)
     {
-        var task = await _appTasksService.GetOne(id);
-        if (task == null)
-        {
-            return NotFound();
-        }
+        var userId = HttpContext.Items["Id"] as string;
+        _ = int.TryParse(userId, out int userIdAsInt);
+        var task = await _appTasksService.GetOne(id, userIdAsInt);
         return Ok(task);
     }
 
@@ -39,16 +38,6 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, AppTaskDto task)
     {
-        if (id != task.Id)
-        {
-            return BadRequest();
-        }
-
-        if (task == null)
-        {
-            return NotFound();
-        }
-
         var updated = await _appTasksService.Update(id, task);
         return Ok(updated);
     }

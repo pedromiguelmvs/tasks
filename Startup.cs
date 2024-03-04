@@ -1,5 +1,6 @@
 using System.Text;
 using Api.Common.Interfaces;
+using Api.Common.Middlewares;
 using Api.Common.Services;
 using Api.Modules.AppTasks;
 using Api.Modules.Auth;
@@ -62,6 +63,7 @@ namespace Api
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseMiddleware<JwtMiddleware>();
       app.UseRouting();
       app.UseAuthentication();
       app.UseAuthorization();

@@ -28,7 +28,7 @@ namespace Api.Modules.Auth
         throw new Exception("Nome de usuário ou senha inválidos.");
       }
 
-      var userMap = _mapper.Map<UserDto>(authDto);
+      var userMap = _mapper.Map<UserDto>(user);
       var token = GenerateToken(userMap);
       return token;
     }
@@ -38,6 +38,7 @@ namespace Api.Modules.Auth
       var claims = new []
       {
         new Claim("username", userDto.Username),
+        new Claim("id", userDto.Id.ToString()),
       };
       var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
       var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
