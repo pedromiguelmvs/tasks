@@ -63,6 +63,7 @@ namespace Api
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseMiddleware<ErrorHandlerMiddleware>();
       app.UseMiddleware<JwtMiddleware>();
       app.UseRouting();
       app.UseAuthentication();
