@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Modules.Auth
@@ -10,9 +11,15 @@ namespace Api.Modules.Auth
 
     [Route("login")]
     [HttpPost]
-    public async Task<string> Login(AuthDto authDto)
+    public async Task<OkObjectResult> Login(AuthDto authDto)
     {
-      return await _authService.Login(authDto);
+      var token = await _authService.Login(authDto);
+      var dictionary = new Dictionary<string, string>
+        {
+            { "token", token },
+        };
+      
+      return Ok(dictionary);
     }
 
     [Route("register")]
