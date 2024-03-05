@@ -13,7 +13,7 @@ namespace Api.Modules.AppTasks
 
     public async Task<List<AppTaskDto>> GetAll(int userId)
     {
-      var tasks = await _context.AppTasks.Where(e => e.UserId == userId).ToListAsync();
+      var tasks = await _context.AppTasks.Where(e => e.UserId == userId && e.DeletedAt == null).ToListAsync();
       return _mapper.Map<List<AppTaskDto>>(tasks);
     }
 
@@ -23,7 +23,7 @@ namespace Api.Modules.AppTasks
       return _mapper.Map<AppTaskDto>(task);
     }
 
-    public async Task<AppTaskDto> Create(AppTaskDto task)
+    public async Task<AppTaskDto> Create(CreateAppTaskDto task)
     {
       var created = _mapper.Map<AppTask>(task);
       _context.AppTasks.Add(created);
@@ -31,7 +31,7 @@ namespace Api.Modules.AppTasks
       return _mapper.Map<AppTaskDto>(created);
     }
 
-    public async Task<AppTaskDto> Update(int id, AppTaskDto taskDto)
+    public async Task<AppTaskDto> Update(int id, int userId, AppTaskDto taskDto)
     {
       if (id != taskDto.Id)
       {
@@ -39,15 +39,27 @@ namespace Api.Modules.AppTasks
       }
 
       var task = await _context.AppTasks.FindAsync(id) ?? throw new Exception("Tarefa não encontrada!");
+
+      if (task.UserId != userId)
+      {
+        throw new Exception("Você não tem permissão para alterar essa task!");
+      }
+
       _mapper.Map(taskDto, task);
       await _context.SaveChangesAsync();
       return _mapper.Map<AppTaskDto>(task);
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> Delete(int id, int userId)
     {
       var task = await _context.AppTasks.FindAsync(id);
-      _context.AppTasks.Remove(task);
+
+      if (task.UserId != userId)
+      {
+        throw new Exception("Você não tem permissão para alterar essa task!");
+      }
+
+      task.DeletedAt = DateTime.UtcNow;
       await _context.SaveChangesAsync();
       return true;
     }
