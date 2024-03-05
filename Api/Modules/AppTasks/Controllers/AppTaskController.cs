@@ -1,4 +1,5 @@
 using Api.Common.NotFoundException;
+using Api.Modules.AppTasks;
 using Api.Modules.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<AppTaskDto>> Create(AppTaskDto task)
+    public async Task<ActionResult<AppTaskDto>> Create(CreateAppTaskDto task)
     {
         var created = await _appTasksService.Create(task);
         return CreatedAtAction(nameof(GetOne), new { created.Id }, created);
@@ -38,7 +39,9 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, AppTaskDto task)
     {
-        var updated = await _appTasksService.Update(id, task);
+        var userId = HttpContext.Items["Id"] as string;
+        _ = int.TryParse(userId, out int userIdAsInt);
+        var updated = await _appTasksService.Update(id, userIdAsInt, task);
         return Ok(updated);
     }
 
@@ -47,7 +50,9 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     {
         try
         {
-            await _appTasksService.Delete(id);
+            var userId = HttpContext.Items["Id"] as string;
+            _ = int.TryParse(userId, out int userIdAsInt);
+            await _appTasksService.Delete(id, userIdAsInt);
             return NoContent();
         }
         catch (NotFoundException)
