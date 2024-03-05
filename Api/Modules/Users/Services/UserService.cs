@@ -1,4 +1,3 @@
-using Api.Modules.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,9 +28,9 @@ namespace Api.Modules.Users
       return user != null;
     }
 
-    public async Task<UserDto> Create(UserDto userDto)
+    public async Task<UserDto> Create(CreateUserDto createUserDto)
     {
-      var user = _mapper.Map<User>(userDto);
+      var user = _mapper.Map<User>(createUserDto);
       _context.Users.Add(user);
       await _context.SaveChangesAsync();
       return _mapper.Map<UserDto>(user);

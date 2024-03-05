@@ -1,17 +1,13 @@
-using System.ComponentModel.DataAnnotations;
-
-public class UserDto(string username, string password) {
+public class UserDto {
     public int Id { get; set; }
     
-    [Required(ErrorMessage = "O campo 'nome de usuário' é obrigatório!")]
-    public string Username { get; set; } = username;
+    public string Username { get; set; }
     
-    [Required(ErrorMessage = "O campo 'senha' é obrigatório!")]
-    public string Password { get; set; } = password;
+    public string Password { get; set; }
 
     public DateTime CreatedAt { get; set; }
     
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; }
     
     public DateTime? DeletedAt { get; set; }
 }

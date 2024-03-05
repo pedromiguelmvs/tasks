@@ -67,7 +67,7 @@ namespace Api.Modules.Auth
       var hashed = hashing.Hash(registerDto.Password);
       registerDto.Password = hashed;
 
-      var user = _mapper.Map<UserDto>(registerDto);
+      var user = _mapper.Map<CreateUserDto>(registerDto);
       var userDto = await _userService.Create(user);
       return userDto;
     }
