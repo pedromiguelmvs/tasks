@@ -32,12 +32,25 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<AppTaskDto>> Create(CreateAppTaskDto task)
     {
+        var userId = HttpContext.Items["Id"] as string;
+        _ = int.TryParse(userId, out int userIdAsInt);
+
+        task.UserId = userIdAsInt;
         var created = await _appTasksService.Create(task);
         return CreatedAtAction(nameof(GetOne), new { created.Id }, created);
     }
 
+    [HttpPost("{id}/status")]
+    public async Task<ActionResult<AppTaskDto>> ChangeTaskStatus(int id)
+    {
+        var userId = HttpContext.Items["Id"] as string;
+        _ = int.TryParse(userId, out int userIdAsInt);
+        var created = await _appTasksService.ChangeTaskStatus(id, userIdAsInt);
+        return Ok(created);
+    }
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, AppTaskDto task)
+    public async Task<IActionResult> Put(int id, UpdateAppTaskDto task)
     {
         var userId = HttpContext.Items["Id"] as string;
         _ = int.TryParse(userId, out int userIdAsInt);

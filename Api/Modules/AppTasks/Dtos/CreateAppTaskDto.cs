@@ -11,8 +11,9 @@ namespace Api.Modules.AppTasks
     [MinLength(3)]
     public string Description { get; set; } = description;
 
-    [Required(ErrorMessage = "É obrigatório informar o usuário ao criar uma tarefa!")]
     public int UserId { get; set; } = userId;
+
+    public bool Done { get; set; } = false;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -15,6 +15,9 @@ public class AppTask {
   [Column("description")]
   public string Description { get; set; } = "Nova descrição";
 
+  [Column("done")]
+  public bool Done { get; set; }
+
   [Column("created_at")]
   public DateTime CreatedAt { get; set; }
 
