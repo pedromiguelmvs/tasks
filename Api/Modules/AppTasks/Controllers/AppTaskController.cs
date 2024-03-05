@@ -1,4 +1,5 @@
 using Api.Common.NotFoundException;
+using Api.Common.Paginator;
 using Api.Modules.AppTasks;
 using Api.Modules.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +13,15 @@ public class TasksController(IAppTaskService appTasksService) : ControllerBase
     private readonly IAppTaskService _appTasksService = appTasksService;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AppTask>>> GetAll()
+    public async Task<ActionResult<PaginationResult<AppTaskDto>>> GetAll()
     {
         var userId = HttpContext.Items["Id"] as string;
         _ = int.TryParse(userId, out int userIdAsInt);
-        var tasks = await _appTasksService.GetAll(userIdAsInt);
+
+        Request.Query.TryGetValue("pageNumber", out var pageNumber);
+        Request.Query.TryGetValue("pageSize", out var pageSize);
+
+        var tasks = await _appTasksService.GetAll(userIdAsInt, int.Parse(pageNumber), int.Parse(pageSize));
         return Ok(tasks);
     }
 

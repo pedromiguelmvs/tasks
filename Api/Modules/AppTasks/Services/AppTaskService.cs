@@ -1,3 +1,4 @@
+using Api.Common.Paginator;
 using Api.Modules.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,23 @@ namespace Api.Modules.AppTasks
 
     private readonly IMapper _mapper = mapper;
 
-    public async Task<List<AppTaskDto>> GetAll(int userId)
+    public async Task<PaginationResult<AppTaskDto>> GetAll(int userId, int pageNumber, int pageSize)
     {
-      var tasks = await _context.AppTasks.Where(e => e.UserId == userId && e.DeletedAt == null).ToListAsync();
-      return _mapper.Map<List<AppTaskDto>>(tasks);
+      var query = _context.AppTasks.AsQueryable().Where(e => e.UserId == userId && e.DeletedAt == null);
+
+      var totalItems = query.Count();
+
+      var appTasks = await query.Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+      var appTaskDto = _mapper.Map<List<AppTaskDto>>(appTasks);
+
+      return new PaginationResult<AppTaskDto>
+      {
+        Data = appTaskDto,
+        TotalItems = totalItems
+      };
     }
 
     public async Task<AppTaskDto> GetOne(int id, int userId)
