@@ -23,7 +23,6 @@ namespace Api
 
     public void ConfigureServices(IServiceCollection services)
     {
-      // services.AddSwaggerGen();
       services.AddEndpointsApiExplorer();
       services.AddControllers();
 
@@ -40,7 +39,8 @@ namespace Api
       services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options => {
+        .AddJwtBearer(options =>
+        {
           options.TokenValidationParameters = new TokenValidationParameters
           {
             ValidateIssuer = true,
@@ -53,6 +53,8 @@ namespace Api
           };
         });
 
+      services.AddCors();
+
       services.AddAuthorization();
 
       services.AddDbContext<ApplicationDbContext>(options =>
@@ -63,6 +65,12 @@ namespace Api
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseCors(builder => {
+        builder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+      });
       app.UseMiddleware<ErrorHandlerMiddleware>();
       app.UseMiddleware<JwtMiddleware>();
       app.UseRouting();
