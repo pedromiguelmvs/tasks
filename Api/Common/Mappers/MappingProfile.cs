@@ -19,8 +19,5 @@ public class MappingProfile : Profile
 
     CreateMap<CreateUserDto, User>();
     CreateMap<UpdateUserDto, User>();
-
-    CreateMap<string, TokenDto>()
-            .ForMember(dest => dest.Token, opt => opt.MapFrom(src => src));
   }
 }
