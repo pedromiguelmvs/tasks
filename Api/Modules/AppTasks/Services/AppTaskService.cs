@@ -31,7 +31,7 @@ namespace Api.Modules.AppTasks
       return _mapper.Map<AppTaskDto>(created);
     }
 
-    public async Task<AppTaskDto> Update(int id, int userId, AppTaskDto taskDto)
+    public async Task<AppTaskDto> Update(int id, int userId, UpdateAppTaskDto taskDto)
     {
       if (id != taskDto.Id)
       {
@@ -46,6 +46,14 @@ namespace Api.Modules.AppTasks
       }
 
       _mapper.Map(taskDto, task);
+      await _context.SaveChangesAsync();
+      return _mapper.Map<AppTaskDto>(task);
+    }
+
+    public async Task<AppTaskDto> ChangeTaskStatus(int id, int userId)
+    {
+      var task = await _context.AppTasks.Where(e => e.Id == id && e.UserId == userId).FirstOrDefaultAsync();
+      task.Done = !task.Done;
       await _context.SaveChangesAsync();
       return _mapper.Map<AppTaskDto>(task);
     }

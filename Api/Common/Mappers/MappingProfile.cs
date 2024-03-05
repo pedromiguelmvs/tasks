@@ -9,6 +9,8 @@ public class MappingProfile : Profile
   {
     CreateMap<CreateAppTaskDto, AppTaskDto>().ReverseMap();
     CreateMap<CreateAppTaskDto, AppTask>().ReverseMap();
+    CreateMap<UpdateAppTaskDto, AppTask>().ReverseMap();
+  
     CreateMap<AppTask, AppTaskDto>().ReverseMap();
     CreateMap<User, UserDto>().ReverseMap();
 

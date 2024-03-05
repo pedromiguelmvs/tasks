@@ -7,7 +7,8 @@ namespace Api.Modules.Interfaces
     Task<List<AppTaskDto>> GetAll(int userId);
     Task<AppTaskDto> GetOne(int id, int userId);
     Task<AppTaskDto> Create(CreateAppTaskDto task);
-    Task<AppTaskDto> Update(int id, int userId, AppTaskDto task);
+    Task<AppTaskDto> Update(int id, int userId, UpdateAppTaskDto task);
+    Task<AppTaskDto> ChangeTaskStatus(int id, int userId);
     Task<bool> Delete(int id, int userId);
   }
 }
