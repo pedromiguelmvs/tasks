@@ -26,7 +26,7 @@
 
 # :paintbrush: Considerações iniciais
 
-Antes de começar, quero esclarecer que, por motivos de organização, este projeto foi dividido em duas partes: __frontend__ e __backend__. O frontend pode ser acessado [clicando aqui](https://github.com/pedromiguelmvs/tasks).
+Antes de começar, quero esclarecer que, por motivos de organização, este projeto foi dividido em duas partes: __frontend__ e __backend__. O frontend pode ser acessado [clicando aqui](https://github.com/pedromiguelmvs/tasks-front).
 
 # :rocket: Features
 
