@@ -13,4 +13,10 @@ public class AppTaskDto(string name, string description, int userId)
     
     [Required(ErrorMessage = "É obrigatório informar o usuário ao criar uma tarefa!")]
     public int UserId { get; set; } = userId;
+
+    public DateTime CreatedAt { get; set; }
+    
+    public DateTime UpdatedAt { get; set; }
+    
+    public DateTime? DeletedAt { get; set; }
   }
