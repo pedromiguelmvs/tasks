@@ -56,6 +56,11 @@ Para armazenar os dados localmente utilizei um container no docker (é necessár
 
 Nossa base de dados já está disponível! Por motivos de praticidade, todas as chaves necessárias já estão no `appsettings.json`, apesar de não ser o ideal em um caso real de uso.
 
+Agora temos que rodar as migrations e atualizar nossa base de dados com o conteúdo da plataforma.
+Vou levar em conta que você tem o Entity Framework instalado globalmente.
+
+```dotnet ef database update```
+
 Tudo certo! Rode o projeto:
 
 ```dotnet watch```
