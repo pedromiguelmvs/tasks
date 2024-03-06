@@ -59,6 +59,10 @@ Nossa base de dados já está disponível! Por motivos de praticidade, todas as 
 Agora temos que rodar as migrations e atualizar nossa base de dados com o conteúdo da plataforma.
 Vou levar em conta que você tem o Entity Framework instalado globalmente.
 
+Primeiro, entre na API principal:
+
+```cd Api```
+
 ```dotnet ef database update```
 
 Tudo certo! Rode o projeto:
