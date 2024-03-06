@@ -63,6 +63,8 @@ Primeiro, entre na API principal:
 
 ```cd Api```
 
+Agora, rode as migrações:
+
 ```dotnet ef database update```
 
 Tudo certo! Rode o projeto:
