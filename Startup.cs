@@ -1,4 +1,5 @@
 using System.Text;
+using Api.Common;
 using Api.Common.Interfaces;
 using Api.Common.Middlewares;
 using Api.Common.Services;
@@ -25,6 +26,8 @@ namespace Api
     {
       services.AddEndpointsApiExplorer();
       services.AddControllers();
+
+      services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
       services.AddTransient<IAppTaskService, AppTaskService>();
       services.AddScoped<IAppTaskService, AppTaskService>();

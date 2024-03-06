@@ -1,54 +1,55 @@
+using System.Linq.Expressions;
+using Api.Common.Interfaces;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Modules.Users
 {
-  public class UserService(ApplicationDbContext context, IMapper mapper) : IUsersService
+  public class UserService(IRepository<User> repository, IMapper mapper) : IUsersService
   {
 
-    private readonly ApplicationDbContext _context = context;
+    private readonly IRepository<User> _repository = repository;
 
     private readonly IMapper _mapper = mapper;
 
     public async Task<List<UserDto>> GetAll()
     {
-      var users = await _context.Users.ToListAsync();
+      var users = await _repository.GetAllAsync();
       return _mapper.Map<List<UserDto>>(users);
     }
 
     public async Task<UserDto> GetOne(string username)
     {
-      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username) ?? throw new Exception("Usuário inexistente.");
+      Expression<Func<User, bool>> predicate = e => e.Username == username;
+      var user = await _repository.GetWhereAsync(predicate) ?? throw new Exception("Usuário inexistente.");
       return _mapper.Map<UserDto>(user);
     }
 
     public async Task<bool> Exist(string username)
     {
-      var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username);
+      Expression<Func<User, bool>> predicate = e => e.Username == username;
+      var user = await _repository.GetWhereAsync(predicate);
       return user != null;
     }
 
     public async Task<UserDto> Create(CreateUserDto createUserDto)
     {
       var user = _mapper.Map<User>(createUserDto);
-      _context.Users.Add(user);
-      await _context.SaveChangesAsync();
+      await _repository.AddAsync(user);
       return _mapper.Map<UserDto>(user);
     }
 
     public async Task<UserDto> Update(int id, UserDto userDto)
     {
-      var user = await _context.Users.FindAsync(id);
+      var user = await _repository.GetByIdAsync(id);
       _mapper.Map(userDto, user);
-      await _context.SaveChangesAsync();
+      await _repository.UpdateAsync(user);
       return _mapper.Map<UserDto>(user);
     }
 
     public async Task<bool> Delete(int id)
     {
-      var user = await _context.Users.FindAsync(id);
-      _context.Users.Remove(user);
-      await _context.SaveChangesAsync();
+      var user = await _repository.GetByIdAsync(id);
+      await _repository.DeleteAsync(user);
       return true;
     }
   }

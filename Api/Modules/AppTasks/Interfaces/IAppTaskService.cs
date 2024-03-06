@@ -5,7 +5,7 @@ namespace Api.Modules.Interfaces
 {
   public interface IAppTaskService
   {
-    Task<PaginationResult<AppTaskDto>> GetAll(int userId, int pageNumber, int pageSize);
+    Task<PaginationResult<AppTask>> GetAll(int userId, int pageNumber, int pageSize);
     Task<AppTaskDto> GetOne(int id, int userId);
     Task<AppTaskDto> Create(CreateAppTaskDto task);
     Task<AppTaskDto> Update(int id, int userId, UpdateAppTaskDto task);
