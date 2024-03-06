@@ -2,17 +2,17 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("users")]
-public class User(string username, string password) {
+public class User {
 
   [Key]
   [Column("id")]
   public int Id { get; set; }
 
   [Column("username")]
-  public string Username { get; set; } = username;
+  public string Username { get; set; }
 
   [Column("password")]
-  public string Password { get; set; } = password;
+  public string Password { get; set; }
 
   [Column("created_at")]
   public DateTime CreatedAt { get; set; }
